@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  Reset / base (mirrors the reference page)                          */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Road + car height. Reference: 200px. Scaled down for tablet / phone. */
+  --road-h: 200px;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --road-h: 160px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --road-h: 120px;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  overflow-x: hidden;
+  background-color: #121212;
+  color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Headline                                                           */
+/* ------------------------------------------------------------------ */
+.value-add {
+  /* Reference: 8rem, gap 0.3rem. Scales down with the viewport so the whole
+     word still fits on narrower screens (8.9vw === 8rem at 1440px wide). */
+  font-size: min(8rem, 8.9vw);
+  gap: 0.0375em;
+  line-height: normal;
+  margin: 0;
+}
+
+.value-letter {
+  will-change: opacity;
+}
+
+@media (max-width: 1023px) {
+  /* Small road: centre the word vertically instead of using 15% from the top. */
+  .value-add {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Statistic cards                                                    */
+/* ------------------------------------------------------------------ */
+/*
+  --u is the "reference pixel". At 1440px wide it is exactly 1px, so every size below
+  (written as N * var(--u)) equals the reference value there, and it scales smoothly
+  on other screens. Reference values: padding 30px, number 58px, text 16px (18px for
+  the first card), gap 5px, margin 16px, radius 10px.
+*/
+.stat-card {
+  --u: clamp(0.75px, 0.1145vw, 0.9px); /* tablet / phone */
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: calc(5 * var(--u));
+  max-width: 46vw;
+  padding: calc(20 * var(--u));
+  border-radius: 10px;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  /* start hidden, GSAP scrubs the opacity */
+  opacity: 0;
+  /* same 0.5s easing as the reference */
+  transition: opacity 0.5s;
+  will-change: opacity;
+}
+
+.stat-card--large {
+  font-size: calc(18 * var(--u));
+}
+
+.stat-num {
+  font-size: calc(40 * var(--u));
+  font-weight: 600;
+}
+
+/* Desktop: exact reference proportions. */
+@media (min-width: 1024px) {
+  .stat-card {
+    --u: min(1px, 0.0694vw); /* 1px at 1440px wide, never larger than the reference */
+    max-width: none;
+    margin: calc(16 * var(--u));
+    padding: calc(30 * var(--u));
+  }
+  .stat-num {
+    font-size: calc(58 * var(--u));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reduced motion                                                     */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    transition: none;
+  }
+}
